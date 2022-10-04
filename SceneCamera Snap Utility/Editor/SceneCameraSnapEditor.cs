@@ -1,6 +1,11 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Tarodev;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DominoCode.Tools
 {
@@ -89,7 +94,6 @@ namespace DominoCode.Tools
                 }
                 EditorGUILayout.EndVertical();
             }
-
         }
 
         private void SaveOrDeleteData()
@@ -116,16 +120,10 @@ namespace DominoCode.Tools
                 campos.rotation = configRotation;
 
                 snapConfig.cameraData.Add(campos);
-
-                AssetDatabase.ForceReserializeAssets();
-
             }
 
             if (snapConfig.cameraData.Count > 0 && GUILayout.Button("Delete All"))
-            {
                 snapConfig.cameraData.Clear();
-                AssetDatabase.ForceReserializeAssets();
-            }
         }
 
         private void LoopList()
