@@ -94,6 +94,8 @@ namespace DominoCode.Tools
                 }
                 EditorGUILayout.EndVertical();
             }
+
+            EditorUtility.SetDirty(snapConfig);
         }
 
         private void SaveOrDeleteData()
