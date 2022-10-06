@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DominoCode.Tools
 {
@@ -58,7 +60,11 @@ namespace DominoCode.Tools
         SceneCameraSnapConfig snapConfig;
 
         private int dataIndex = 0;
+
+        private bool addSceneName = true;
+
         private string configName;
+        private string currentSceneName;
 
         private string configMessage = "You can move this asset where ever you'd like.\nDo not rename this file.\nKeep the default name 'SceneCameraSnapConfig'\nFind asset in Menu options Tools >> Scene Camera Snap";
 
@@ -84,7 +90,7 @@ namespace DominoCode.Tools
                 {
                     LoopList();
 
-                    EditorGUILayout.Space(5);
+                    EditorGUILayout.Space(10);
 
                     DrawConfigList();
                 }
@@ -97,6 +103,7 @@ namespace DominoCode.Tools
         private void SaveOrDeleteData()
         {
             configName = EditorGUILayout.TextField("Name", configName);
+            addSceneName = EditorGUILayout.Toggle("Add Scene Name", addSceneName);
 
             EditorGUILayout.Space(2);
 
@@ -107,10 +114,15 @@ namespace DominoCode.Tools
 
                 CameraData campos = new CameraData();
 
-                if (string.IsNullOrEmpty(configName) || string.IsNullOrWhiteSpace(configName))
-                    campos.name = "Position " + snapConfig.cameraData.Count;
+                if (addSceneName)
+                    currentSceneName = SceneManager.GetActiveScene().name + " - ";
                 else
-                    campos.name = configName;
+                    currentSceneName = "";
+
+                if (string.IsNullOrEmpty(configName) || string.IsNullOrWhiteSpace(configName))
+                    campos.name = currentSceneName + "Position " + snapConfig.cameraData.Count;
+                else
+                    campos.name = currentSceneName + configName;
 
                 configName = "";
 
@@ -120,7 +132,7 @@ namespace DominoCode.Tools
                 snapConfig.cameraData.Add(campos);
             }
 
-            if (snapConfig.cameraData.Count > 0 && GUILayout.Button("Delete All"))
+            if (snapConfig.cameraData.Count > 0 && GUILayout.Button("Delete All", GUILayout.ExpandWidth(true), GUILayout.Height(30)))
                 snapConfig.cameraData.Clear();
         }
 
@@ -133,7 +145,7 @@ namespace DominoCode.Tools
 
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("<< Prev", GUILayout.Width(60), GUILayout.ExpandHeight(true)))
+            if (GUILayout.Button("<< Prev", GUILayout.Width(60), GUILayout.Height(25)))
             {
                 dataIndex--;
 
@@ -143,10 +155,10 @@ namespace DominoCode.Tools
                 SetConfigData(config);
             }
 
-            if (GUILayout.Button(config.name))
+            if (GUILayout.Button(config.name, GUILayout.ExpandWidth(true), GUILayout.Height(25)))
                 SetConfigData(config);
 
-            if (GUILayout.Button("Next >>", GUILayout.Width(60), GUILayout.ExpandHeight(true)))
+            if (GUILayout.Button("Next >>", GUILayout.Width(60), GUILayout.Height(25)))
             {
                 dataIndex++;
 
@@ -191,8 +203,8 @@ namespace DominoCode.Tools
 
 
         #endregion
-    
-    
-    
+
+
+
     }
 }
