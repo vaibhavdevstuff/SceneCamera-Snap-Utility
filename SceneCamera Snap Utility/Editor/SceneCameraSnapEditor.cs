@@ -90,6 +90,8 @@ namespace DominoCode.Tools
                 {
                     LoopList();
 
+                    SortDataList();
+
                     EditorGUILayout.Space(10);
 
                     DrawConfigList();
@@ -172,6 +174,16 @@ namespace DominoCode.Tools
 
         }
 
+        private void SortDataList()
+        {
+            if (GUILayout.Button("Sort"))
+            {
+                List<CameraData> SortedList = snapConfig.cameraData.OrderBy(o => o.name).ToList();
+                snapConfig.cameraData.Clear();
+                snapConfig.cameraData = SortedList;
+            }
+        }
+
         private void DrawConfigList()
         {
             for (int i = 0; i < snapConfig.cameraData.Count; i++)
@@ -181,7 +193,10 @@ namespace DominoCode.Tools
                 EditorGUILayout.BeginHorizontal();
 
                 if (GUILayout.Button(config.name))
+                {
                     SetConfigData(config);
+                    dataIndex = i;
+                }
 
                 if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.ExpandHeight(true)))
                 {
